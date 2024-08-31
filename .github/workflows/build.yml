@@ -18,9 +18,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y \
-          mingw-w64 \       # Install MinGW for cross-compiling
-          ninja-build \    # Install Ninja build system
-          cmake \          # Install CMake for build configuration
+          mingw-w64 \
+          ninja-build \
+          cmake
 
     - name: Make build folder and CMake
       run: |
