@@ -17,11 +17,8 @@ jobs:
     - name: Install required packages
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          mingw-w64 \
-          cmake \
-          build-essential # Ensure make and other build tools are installed
-
+        sudo apt-get install -y build-essential # Installs make and other essential tools
+        
     - name: Make build folder and CMake
       run: |
         mkdir -p _build_win32
