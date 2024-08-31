@@ -1,6 +1,6 @@
-name: EE Builder
+name: Build and Package
 
-on: 
+on:
   push:
     branches: [ '*' ]
   pull_request:
@@ -17,16 +17,23 @@ jobs:
     - name: Update and install packages
       run: |
         sudo apt-get update
+        sudo apt-get install -y \
+          mingw-w64 \       # Install MinGW for cross-compiling
+          ninja-build \    # Install Ninja build system
+          cmake \          # Install CMake for build configuration
 
     - name: Make build folder and CMake
       run: |
-        mkdir _build_win32
+        mkdir -p _build_win32
         cd _build_win32
-        cmake .. -G Ninja -DSERIOUS_PROTON_DIR=/ee-workspace/SeriousProton -DCMAKE_TOOLCHAIN_FILE=../cmake/mingw.toolchain -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        cmake .. -G Ninja \
+                 -DSERIOUS_PROTON_DIR=/ee-workspace/SeriousProton \
+                 -DCMAKE_TOOLCHAIN_FILE=../cmake/mingw.toolchain \
+                 -DCMAKE_BUILD_TYPE=RelWithDebInfo
         cmake --build . --target package
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: EmptyEpsilon
+        name: EE Builder
         path: _build_win32/EmptyEpsilon.zip
