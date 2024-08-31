@@ -1,4 +1,4 @@
-name: Build and Package
+name: Debug Make Installation
 
 on:
   push:
@@ -7,33 +7,22 @@ on:
     branches: [ '*' ]
 
 jobs:
-  build:
+  debug:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Update and install packages
+    - name: Install basic build tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y \
-          mingw-w64 \
-          cmake \
-          build-essential # Install make and other build tools
+        sudo apt-get install -y build-essential # Installs make and other essential tools
 
-    - name: Make build folder and CMake
+    - name: Verify make installation
       run: |
-        mkdir -p _build_win32
-        cd _build_win32
-        cmake .. -G "Unix Makefiles" \
-                 -DSERIOUS_PROTON_DIR=/ee-workspace/SeriousProton \
-                 -DCMAKE_TOOLCHAIN_FILE=../cmake/mingw.toolchain \
-                 -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        cmake --build . --target package
+        make --version # Checks if make is installed
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: EE Builder
-        path: _build_win32/EmptyEpsilon.zip
+    - name: Verify CMake installation
+      run: |
+        cmake --version # Checks if CMake is installed
